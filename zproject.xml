@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="ZMovieClip" package="com.sample.zmovieclip" version="1.0.0" company="Company Name" />
+	<app main="Main" path="Export" file="ZMovieClip" />
+	
+	<source path="Source" />
+	
+	<haxelib name="openfl" />
+	<haxelib name="zygameui"/>
+	
+	<assets path="Assets" rename="assets" />
+
+	<haxedef name="no-deprecation-warnings"/>
+	
+</project>
