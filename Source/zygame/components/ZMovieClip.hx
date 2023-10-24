@@ -23,7 +23,7 @@ class ZMovieClip extends ZAnimation {
 	override private function set_dataProvider(data:Dynamic):Dynamic {
 		_animation = data;
 		if (!inited) {
-			init(0.0 + cast(_dataProvider, AnimationData).fps.fps);
+			init(0.0 + cast(_animation, AnimationData).fps.fps);
 			inited = true;
 		}
 		return data;
@@ -74,7 +74,14 @@ class ZMovieClip extends ZAnimation {
 		while (_currentFrameID < lastFrameID && getFrames()[_currentFrameID + 1].startTime <= value) {
 			++_currentFrameID;
 		}
+		//currentFrame = _currentFrameID;
+		
 		currentFrame = _currentFrameID;
+		
+		
+		playGo(currentFrame);
+		stop();
+
 		return this.currentTime;
 	}
 
@@ -89,7 +96,7 @@ class ZMovieClip extends ZAnimation {
 	var _ct:Float = 0;
 	public function advanceTime(passedTime:Float):Void {
 		_ct = currentTime ?? 0.0;
-		_ct += 0.1;
+		_ct += 1/60;
 
 		if(_ct > totalTime){
 			_ct = 0;
