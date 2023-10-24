@@ -11,7 +11,7 @@ class ZMovieClip extends ZAnimation {
 	public var numFrames(get, never):UInt;
 
 	inline function get_numFrames() {
-		return @:privateAccess _dataProvider.frames.length;
+		return dataProvider.frames.length;
 	}
 
 	public function new() {
@@ -21,7 +21,7 @@ class ZMovieClip extends ZAnimation {
 	private var inited:Bool = false;
 
 	override private function set_dataProvider(data:Dynamic):Dynamic {
-		_dataProvider = data;
+		_animation = data;
 		if (!inited) {
 			init(0.0 + cast(_dataProvider, AnimationData).fps.fps);
 			inited = true;
@@ -40,7 +40,7 @@ class ZMovieClip extends ZAnimation {
 		_defaultFrameDuration = 1.0 / fps;
 		_currentFrameID = 0;
 
-		currentTime = 0.0;
+		//currentTime = 0.0;
 
 		for (i => frame in getFrames()) {
 			frame.duration = _defaultFrameDuration;
@@ -56,7 +56,7 @@ class ZMovieClip extends ZAnimation {
 	}
 
 	function getFrames():Array<MovieClipFrameData> {
-		return @:privateAccess this._dataProvider.frames;
+		return this.dataProvider.frames;
 	}
 
 	@:isVar public var currentTime(get, set):Float;
@@ -86,13 +86,16 @@ class ZMovieClip extends ZAnimation {
 		return zmc;
 	}
 
+	var _ct:Float = 0;
 	public function advanceTime(passedTime:Float):Void {
+		_ct = currentTime ?? 0.0;
+		_ct += 0.1;
 
-		currentTime = currentTime + 0.1;
-
-		if(currentTime > totalTime){
-			currentTime = 0;
+		if(_ct > totalTime){
+			_ct = 0;
 		}
+
+		currentTime = _ct;
 
 	}
 
