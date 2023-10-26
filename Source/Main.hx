@@ -50,7 +50,18 @@ class Main extends Start {
 
 				var frames = assets.getTextureAtlas("run_format_JSON").getBitmapDataFrames("run");
 		
-				var zmc:ZMovieClip = new ZMovieClip(60,frames);
+				zmc = new ZMovieClip(60,frames);
+
+				var n = 0;
+				zmc.addFrameScript(Std.int(zmc.dataProvider.frames.length - 1),function () {
+					if(++n % 5 == 0){
+						speed = -speed;
+					}
+				});
+				
+				
+				
+
 				addChild(zmc);
 				zmc.x = 300;
 				zmc.y = 450;
@@ -63,9 +74,12 @@ class Main extends Start {
 	}
 	var juggler:ZJuggler = new ZJuggler();
 	var lastTime:Float = Lib.getTimer();
+	var speed:Float = 1;
+	var zmc:ZMovieClip;
 	override function onFrame() {
 		var delta:Float = Lib.getTimer() - lastTime;
 		juggler.advanceTime(delta / 1000 * 1.5); // 90 fps
+		if(zmc != null) zmc.x += speed;
 		lastTime = Lib.getTimer();
 		super.onFrame();
 	}

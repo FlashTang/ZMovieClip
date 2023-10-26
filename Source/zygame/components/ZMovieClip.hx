@@ -9,6 +9,7 @@
 // =================================================================================================
 package zygame.components;
 
+import openfl.display.BitmapData;
 import zygame.components.data.AnimationData;
 import openfl.events.EventType;
 import openfl.errors.Error;
@@ -19,6 +20,7 @@ import haxe.Constraints.Function;
 import openfl.errors.ArgumentError;
 import openfl.Vector;
 
+ 
 
 class ZMovieClip extends ZAnimation implements IAnimatable {
     public var starling_mc:_MovieClip;
@@ -27,36 +29,54 @@ class ZMovieClip extends ZAnimation implements IAnimatable {
 		var anData:AnimationData = new AnimationData(fps);
 		anData.addFrames(bitmaps);
 		this.dataProvider = anData;
-        stop(0);
         starling_mc = new _MovieClip(new Vector(bitmaps.length),fps,this);
-        for (fn in ["getFrameTexture","getFrameSound","setFrameSound","getFrameAction","setFrameAction","getFrameDuration","setFrameDuration"]) {
-            Reflect.setField(this,fn,Reflect.field(starling_mc,fn));
-        }
+        // for (fn in ["getFrameTexture","getFrameSound","setFrameSound","getFrameAction","setFrameAction","getFrameDuration","setFrameDuration"]) {
+        //     Reflect.setField(this,fn,Reflect.field(starling_mc,fn));
+        // }
     }
+
     override function play(loop:Int = 1) {
         starling_mc.loop = loop != 0;
         starling_mc.play();
     }
     public function addFrame(texture:Texture, sound:Sound = null, duration:Float = -1):Void{
+        _animation.addFrame(texture.bitmapData);
         starling_mc.addFrame(texture,sound,duration);
     }
-    public function addFrameAt(frameID:Int, texture:Texture, sound:Sound = null, duration:Float = -1):Void{
-        starling_mc.addFrameAt(frameID,texture,sound,duration);
+    @:deprecated public function addFrameAt(frameID:Int, texture:Texture, sound:Sound = null, duration:Float = -1):Void{
+        throw new Error("addFrameAt:尚未为实现，已禁用！");
+        //starling_mc.addFrameAt(frameID,texture,sound,duration);
     }
-    public function removeFrameAt(frameID:Int):Void{
+    @:deprecated public function removeFrameAt(frameID:Int):Void{
+        throw new Error("removeFrameAt:尚未为实现，已禁用！");
         starling_mc.removeFrameAt(frameID);
     }
-    extern public function getFrameTexture(frameID:Int):Texture;
-    public function setFrameTexture(frameID:Int, texture:Texture):Void{
-        starling_mc.setFrameTexture(frameID,texture);
+    public function getFrameTexture(frameID:Int):Dynamic{
+        return dataProvider.frames[frameID];
     }
-    extern public function getFrameSound(frameID:Int):Sound;
-    extern public function setFrameSound(frameID:Int, sound:Sound):Void;
-    extern public function getFrameAction(frameID:Int):Function;
-    extern public function setFrameAction(frameID:Int, action:Function):Void;
-    extern public function getFrameDuration(frameID:Int):Float;
-    extern public function setFrameDuration(frameID:Int, duration:Float):Void;
-    public function reverseFrames():Void{
+    public function setFrameTexture(frameID:Int, texture:Texture):Void{
+        dataProvider.frames[frameID] = texture.bitmapData;
+    }
+    public function getFrameSound(frameID:Int):Sound{
+        return starling_mc.getFrameSound(frameID);
+    }
+    public function setFrameSound(frameID:Int, sound:Sound):Void{
+        starling_mc.setFrameSound(frameID,sound);
+    }
+    public function getFrameAction(frameID:Int):Function{
+        return starling_mc.getFrameAction(frameID);
+    }
+    public function setFrameAction(frameID:Int, action:Function):Void{
+        starling_mc.setFrameAction(frameID,action);
+    }
+    public function getFrameDuration(frameID:Int):Float{
+        return starling_mc.getFrameDuration(frameID);
+    }
+    public function setFrameDuration(frameID:Int, duration:Float):Void{
+        starling_mc.setFrameDuration(frameID,duration);
+    }
+    @:deprecated public function reverseFrames():Void{
+        throw new Error("reverseFrames:尚未为实现，已禁用！");
         starling_mc.reverseFrames();
     }
     public function advanceTime(time:Float):Void{
@@ -66,9 +86,15 @@ class ZMovieClip extends ZAnimation implements IAnimatable {
         }
     }
 
+
+    public function addFrameScript(id:Int,script:Function) {
+        this.setFrameAction(id,script);
+    }
     public static function createAnimation(fps:Int, bitmaps:Array<Dynamic>):ZMovieClip {
         return new ZMovieClip(fps,bitmaps);
 	}
+
+    
     
 }
 
@@ -84,6 +110,7 @@ class _MovieClip extends MovieClip {
             zmc.stop(currentFrame);
         }
     }
+
 }
 
 class DisplayObject extends EventDispatcher {
@@ -91,7 +118,10 @@ class DisplayObject extends EventDispatcher {
 }
 
 class Texture {
-	public function new() {}
+    public var bitmapData:BitmapData;
+	public function new() {
+      
+    }
 }
 
 interface IAnimatable{
