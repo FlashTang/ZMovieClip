@@ -52,12 +52,33 @@ class Main extends Start {
 		
 				zmc = new ZMovieClip(60,frames);
 
+				
+				var action_mc = new ZMovieClip(1,[null,null]);
+				action_mc.setFrameDuration(0,10/1000);//第1帧10毫秒
+				action_mc.setFrameDuration(1,0/1000);//第2帧0毫秒
+				var steps:Int = 0;
 				var n = 0;
-				zmc.addFrameScript(Std.int(zmc.dataProvider.frames.length - 1),function () {
-					if(++n % 5 == 0){
+				action_mc.setFrameAction(0,function () {
+					if(zmc != null){
+						zmc.x += speed * 2;
+					}
+					if(++n % 100 == 0){
 						speed = -speed;
 						trace("zmc.x:",zmc.x);
 					}
+					++steps;
+			
+				});
+				juggler.add(action_mc);
+				action_mc.play();
+
+				action_mc.advanceTime(1);
+				trace("1秒钟执行了:",steps,"次");
+
+				zmc.addFrameScript(Std.int(zmc.dataProvider.frames.length - 1),function () {
+					// if(++n % 5 == 0){
+					// 	speed = -speed;
+					// }
 				});
 				
 				addChild(zmc);
@@ -72,14 +93,11 @@ class Main extends Start {
 	}
 	var juggler:ZJuggler = new ZJuggler();
 	var lastTime:Float = Lib.getTimer();
-	var speed:Float = 10;
+	var speed:Float = -1;
 	var zmc:ZMovieClip;
 	override function onFrame() {
 		var delta:Float = Lib.getTimer() - lastTime;
 		juggler.advanceTime(delta / 1000 * 2); // 90 fps
-		if(zmc != null) {
-			zmc.x += speed * delta / 60;
-		}
 		lastTime = Lib.getTimer();
 		super.onFrame();
 	}
