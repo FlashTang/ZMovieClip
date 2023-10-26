@@ -1,8 +1,7 @@
 package;
 
+import openfl.Vector;
 import openfl.Lib;
-import openfl.events.Event;
-import zygame.data.ZMovieClipData;
 import zygame.components.ZMovieClip;
 import zygame.components.data.AnimationData;
 import zygame.components.ZAnimation;
@@ -46,24 +45,28 @@ class Main extends Start {
 				animate.x = 300;
 				animate.y = 300;
 
-				var frames = assets.getTextureAtlas("run_format_JSON").getBitmapDataFrames("run");
-				zmc = ZMovieClip.createMovieClip(60, frames);
+				animate.play(9999);
+			
 
+				var frames = assets.getTextureAtlas("run_format_JSON").getBitmapDataFrames("run");
+		
+				var zmc:ZMovieClip = new ZMovieClip(60,frames);
 				addChild(zmc);
 				zmc.x = 300;
-				zmc.y = 400;
-				zmc.play(9999);
-
-				var lastTime:Float = Lib.getTimer();
-				stage.addEventListener(Event.ENTER_FRAME, function(e:Event) {
-					var delta:Float = Lib.getTimer() - lastTime;
-					zmc?.advanceTime(delta);
-					lastTime = Lib.getTimer();
-				});
+				zmc.y = 450;
+				juggler.add(zmc);
+				zmc.play();				
+		
 			}
 		});
 		ZBuilder.bindAssets(assets);
 	}
-
-	var zmc:ZMovieClip;
+	var juggler:ZJuggler = new ZJuggler();
+	var lastTime:Float = Lib.getTimer();
+	override function onFrame() {
+		var delta:Float = Lib.getTimer() - lastTime;
+		juggler.advanceTime(delta / 1000 * 1.5); // 90 fps
+		lastTime = Lib.getTimer();
+		super.onFrame();
+	}
 }
