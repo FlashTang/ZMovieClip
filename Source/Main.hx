@@ -56,6 +56,7 @@ class Main extends Start {
 				zmc.addFrameScript(Std.int(zmc.dataProvider.frames.length - 1),function () {
 					if(++n % 5 == 0){
 						speed = -speed;
+						trace("zmc.x:",zmc.x);
 					}
 				});
 				
@@ -71,13 +72,13 @@ class Main extends Start {
 	}
 	var juggler:ZJuggler = new ZJuggler();
 	var lastTime:Float = Lib.getTimer();
-	var speed:Float = 1;
+	var speed:Float = 10;
 	var zmc:ZMovieClip;
 	override function onFrame() {
 		var delta:Float = Lib.getTimer() - lastTime;
-		juggler.advanceTime(delta / 1000 * 1.5); // 90 fps
+		juggler.advanceTime(delta / 1000 * 2); // 90 fps
 		if(zmc != null) {
-			zmc.x += speed;
+			zmc.x += speed * delta / 60;
 		}
 		lastTime = Lib.getTimer();
 		super.onFrame();
