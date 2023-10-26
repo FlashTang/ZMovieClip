@@ -52,7 +52,7 @@ class Main extends Start {
 		
 				zmc = new ZMovieClip(60,frames);
 
-				
+				//利用starling movieclip来精准执行脚本
 				var action_mc = new ZMovieClip(1,[null,null]);
 				action_mc.setFrameDuration(0,10/1000);//第1帧10毫秒
 				action_mc.setFrameDuration(1,0/1000);//第2帧0毫秒
@@ -72,7 +72,7 @@ class Main extends Start {
 				juggler.add(action_mc);
 				action_mc.play();
 
-				action_mc.advanceTime(1);
+				action_mc.advanceTime(1); 
 				trace("1秒钟执行了:",steps,"次");
 
 				zmc.addFrameScript(Std.int(zmc.dataProvider.frames.length - 1),function () {
