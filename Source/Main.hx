@@ -59,9 +59,6 @@ class Main extends Start {
 					}
 				});
 				
-				
-				
-
 				addChild(zmc);
 				zmc.x = 300;
 				zmc.y = 450;
@@ -79,7 +76,9 @@ class Main extends Start {
 	override function onFrame() {
 		var delta:Float = Lib.getTimer() - lastTime;
 		juggler.advanceTime(delta / 1000 * 1.5); // 90 fps
-		if(zmc != null) zmc.x += speed;
+		if(zmc != null) {
+			zmc.x += speed;
+		}
 		lastTime = Lib.getTimer();
 		super.onFrame();
 	}

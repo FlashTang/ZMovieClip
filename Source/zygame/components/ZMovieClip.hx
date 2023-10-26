@@ -30,9 +30,6 @@ class ZMovieClip extends ZAnimation implements IAnimatable {
 		anData.addFrames(bitmaps);
 		this.dataProvider = anData;
         starling_mc = new _MovieClip(new Vector(bitmaps.length),fps,this);
-        // for (fn in ["getFrameTexture","getFrameSound","setFrameSound","getFrameAction","setFrameAction","getFrameDuration","setFrameDuration"]) {
-        //     Reflect.setField(this,fn,Reflect.field(starling_mc,fn));
-        // }
     }
 
     override function play(loop:Int = 1) {
@@ -45,11 +42,9 @@ class ZMovieClip extends ZAnimation implements IAnimatable {
     }
     @:deprecated public function addFrameAt(frameID:Int, texture:Texture, sound:Sound = null, duration:Float = -1):Void{
         throw new Error("addFrameAt:尚未为实现，已禁用！");
-        //starling_mc.addFrameAt(frameID,texture,sound,duration);
     }
     @:deprecated public function removeFrameAt(frameID:Int):Void{
         throw new Error("removeFrameAt:尚未为实现，已禁用！");
-        starling_mc.removeFrameAt(frameID);
     }
     public function getFrameTexture(frameID:Int):Dynamic{
         return dataProvider.frames[frameID];
@@ -90,7 +85,7 @@ class ZMovieClip extends ZAnimation implements IAnimatable {
     public function addFrameScript(id:Int,script:Function) {
         this.setFrameAction(id,script);
     }
-    public static function createAnimation(fps:Int, bitmaps:Array<Dynamic>):ZMovieClip {
+    public static function createMovieClip(fps:Int, bitmaps:Array<Dynamic>):ZMovieClip {
         return new ZMovieClip(fps,bitmaps);
 	}
 
